@@ -2,7 +2,7 @@
 
 An interactive, responsive single-page web application designed for plant tissue culture and micropropagation laboratories to automate culture media formulations. Built entirely with vanilla HTML5, CSS3, and JavaScript, this project demonstrates how complex manual chemical calculations can be streamlined into a modern, user-friendly digital interface.
 
-![Culture Media Calculator Demo](https://images.unsplash.com/photo-1530026405186-ed1ea0ac7a63?auto=format&fit=crop&q=80&w=800) *(Visual representation of laboratory calculation automation)*
+
 
 ## Project Description
 
