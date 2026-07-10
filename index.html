@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Culture Media Calculator - An interactive portfolio project demonstrating automated calculations inspired by plant tissue culture routines with fictional formulations.">
+  <title>Culture Media Calculator | Tissue Culture Portfolio</title>
+  
+  <!-- Preconnect to Google Fonts for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header Section -->
+    <header class="app-header">
+      <div class="logo-area">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="logo-icon">
+          <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+          <path d="M12 6v12"/>
+          <path d="M8 10h8"/>
+          <path d="M12 12m-3 0a3 3 0 1 0 6 0 3 3 0 1 0 -6 0"/>
+        </svg>
+        <span class="logo-text">BioTech Calc</span>
+      </div>
+      <h1 class="main-title">Culture Media Calculator</h1>
+      <p class="subtitle">Interactive calculator inspired by plant tissue culture workflows.</p>
+      <div class="project-description">
+        <p>This application demonstrates the automation of calculations commonly utilized in micropropagation and plant tissue culture routines. By inputting the target final volume, the system dynamically scales chemical stock formulations in real-time, eliminating manual calculation errors.</p>
+      </div>
+      
+      <!-- Portfolio Disclaimer Notice -->
+      <div class="disclaimer-banner">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="info-icon">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        <p class="disclaimer-text"><strong>Notice:</strong> This project uses fictional formulations created exclusively for portfolio purposes.</p>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      <!-- Form Card -->
+      <section class="card form-card">
+        <h2 class="section-title">Configure Preparation</h2>
+        <form id="calculatorForm" novalidate>
+          <div class="form-group">
+            <label for="mediumSelect" class="form-label">Select Culture Medium</label>
+            <div class="select-wrapper">
+              <select id="mediumSelect" class="form-control" required>
+                <option value="" disabled selected>Choose a medium...</option>
+                <option value="mediumA">Culture Medium A</option>
+                <option value="mediumB">Culture Medium B</option>
+                <option value="mediumC">Culture Medium C</option>
+              </select>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="select-chevron">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="volumeInput" class="form-label">Final Volume (L)</label>
+            <input type="number" id="volumeInput" class="form-control" placeholder="e.g., 12.5" step="any" min="0.001" required>
+          </div>
+
+          <!-- Error Alert Container -->
+          <div id="validationMessage" class="error-container hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="error-icon">
+              <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span class="error-text">Please select a medium and enter a valid volume greater than zero.</span>
+          </div>
+
+          <button type="submit" id="generateBtn" class="btn btn-primary">
+            <span>Generate Formula</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="btn-icon">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+        </form>
+      </section>
+
+      <!-- Results Card (Hidden by default, displayed via JS transition) -->
+      <section id="resultsSection" class="card results-card hidden">
+        <div class="results-header">
+          <div>
+            <h2 class="section-title">Formulation Sheet</h2>
+            <p id="formulaMetadata" class="results-subtitle">Culture Medium A - 12.5 Liters</p>
+          </div>
+          
+          <!-- Actions Container -->
+          <div class="action-buttons-group">
+            <button id="copyBtn" class="btn btn-secondary" title="Copy table to clipboard">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="action-icon">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>Copy</span>
+            </button>
+            <button id="csvBtn" class="btn btn-secondary" title="Export data as CSV">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="action-icon">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <span>Export CSV</span>
+            </button>
+            <button id="printBtn" class="btn btn-secondary" title="Print formula">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="action-icon">
+                <polyline points="6 9 6 2 18 2 18 9"/>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                <rect x="6" y="14" width="12" height="8"/>
+              </svg>
+              <span>Print</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Formula Table -->
+        <div class="table-container">
+          <table class="formula-table" id="formulaTable">
+            <thead>
+              <tr>
+                <th scope="col">Ingredient</th>
+                <th scope="col" class="text-right">Base Concentration</th>
+                <th scope="col" class="text-right">Amount Required</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <!-- Dynamically populated by JS -->
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Toast Notification for Copy Action -->
+        <div id="copyToast" class="toast hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="toast-icon">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span>Formula copied to clipboard!</span>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>&copy; 2026 Plant Tissue Culture Calculator &bull; Portfolio Concept</p>
+    </footer>
+  </div>
+
+  <!-- Main JavaScript File -->
+  <script src="script.js" defer></script>
+</body>
+</html>
